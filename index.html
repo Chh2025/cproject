@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EventEase - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #dceeff, #e0d6ff);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 10px;
+      background: #4a69bd;
+      color: white;
+    }
+
+    header h1 {
+      font-size: 3rem;
+    }
+
+    nav {
+      margin-top: 15px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+
+    .cta-btn {
+      background: #4a69bd;
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 6px;
+      transition: background 0.3s;
+    }
+
+    .cta-btn:hover {
+      background-color: #2e59d9;
+    }
+
+    .event-section {
+      padding: 50px 20px;
+      text-align: center;
+      background-color: #ffffff;
+    }
+
+    .event-section h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .event-card {
+      background: #f4f4f4;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .event-card h3 {
+      color: #4a69bd;
+    }
+
+    .event-card p {
+      margin: 8px 0;
+      font-size: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #4a69bd;
+      color: white;
+      margin-top: 40px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      text-align: center;
+      color: #4a69bd;
+      margin-bottom: 20px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4a69bd;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>EventEase</h1>
+    <nav>
+      <a href="login.php">Login</a>
+      <a href="register.php">Register</a>
+      <a href="event_list.php">Events</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Explore. Register. Experience.</h2>
+    <p>Find amazing events around you and join the excitement!</p>
+    <button class="cta-btn" onclick="scrollToEvents()">
+      <i class="fas fa-calendar-check"></i> View Events
+    </button>
+    <button class="cta-btn" onclick="openModal()">
+      <i class="fas fa-user-shield"></i> Admin Login
+    </button>
+  </section>
+
+  <section id="eventSection" class="event-section">
+    <h2>Upcoming Events</h2>
+    <div class="event-grid" id="eventList"></div>
+  </section>
+
+  <footer>
+    © 2025 EventEase. All rights reserved.
+  </footer>
+
+  <!-- Admin Login Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2>Admin Login</h2>
+      <form method="POST" action="admin/login.php">
+        <input type="email" name="email" placeholder="Admin Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <!-- Back to Home Link -->
+  <div style="text-align: center; margin-top: 15px;">
+    <a href="index.html" style="color: #0083b0; text-decoration: none; font-weight: bold;">
+      ← Back to Home
+    </a>
+    </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function scrollToEvents() {
+      document.getElementById("eventSection").scrollIntoView({ behavior: "smooth" });
+    }
+
+    const events = [
+      {
+        title: "Tech Conference 2025",
+        description: "Explore the future of technology with global speakers.",
+        date: "Aug 15, 2025",
+        location: "COLLEGE BUILDING OF GCE GAYA"
+      },
+      {
+        title: "Startup Meetup",
+        description: "Connect with entrepreneurs and investors.",
+        date: "Oct 01, 2025",
+        location: "GCE CAMPUS"
+      },
+      {
+        title: "Cultural Fest",
+        description: "A colorful mix of music, dance, and art.",
+        date: "Sep 10, 2025",
+        location: "GAYA COLLEGE OF ENGINEERING,GAYA"
+      }
+    ];
+
+    const eventList = document.getElementById("eventList");
+
+    events.forEach((event) => {
+      const card = document.createElement("div");
+      card.classList.add("event-card");
+      card.innerHTML = `
+        <h3>${event.title}</h3>
+        <p>${event.description}</p>
+        <p><strong>Date:</strong> ${event.date}</p>
+        <p><strong>Location:</strong> ${event.location}</p>
+      `;
+      eventList.appendChild(card);
+    });
+
+    function openModal() {
+      document.getElementById("adminModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("adminModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("adminModal");
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
