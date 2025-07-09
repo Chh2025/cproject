@@ -1,1 +1,2 @@
+COLLEGE EVENT PROJECT
 # cproject
